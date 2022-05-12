@@ -1,8 +1,8 @@
 const inquirer = require('inquirer');
 const Manager = require('./lib/Manager.js');
 const Engineer = require('./lib/Engineer.js');
-
-
+const Intern = require('./lib/Intern.js');
+const fs = require('fs');
 
 let teamArray = [];
 
@@ -35,6 +35,8 @@ const createManager = () => {
         createMenu()
     }) 
 
+}
+
     const createEngineer = () => {
         inquirer.prompt([
             {
@@ -64,4 +66,32 @@ const createManager = () => {
         })
     }
 
-
+    const createIntern = () => {
+        inquirer.prompt([
+            {
+                type: 'text',
+                name: 'name',
+                message: "What is the  name?",
+            },
+            {
+                type: 'number',
+                name: 'employeeID',
+                message: "What is the employee ID?",
+            },
+            {
+                type: 'text',
+                name: 'email',
+                message: "What is the email?",
+            },
+            {
+                type: 'text',
+                name: 'school',
+                message: "What school does/ did you attend?",
+            }
+        ]) .then (answers => {
+            let intern = new Intern (answers.name, answers.employeeID, answers.email, answers.school);
+            teamArray.push(intern)
+            createMenu()
+        })
+    }
+    createManager()
