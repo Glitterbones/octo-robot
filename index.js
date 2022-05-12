@@ -21,7 +21,7 @@ const createManager = () => {
         {
 
             type: 'text',
-            name: 'officeNumber',
+            name: 'phoneNumber',
             message: "What is the phone number?",
         },
         {
