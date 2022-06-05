@@ -1,97 +1,82 @@
-const inquirer = require('inquirer');
-const Manager = require('./lib/Manager.js');
-const Engineer = require('./lib/Engineer.js');
-const Intern = require('./lib/Intern.js');
-const fs = require('fs');
-const createHTML = require('./src/page-template.js');
-let teamArray = [];
+// Including packages needed for this application
+const inquirer = require("inquirer");
+const fs = require("fs");
 
-const createManager = () => {
-    inquirer.prompt([
-        {
-            type: 'text',
-            name: 'name',
-            message: "What is the managers name?",
-        },
-        {
-            type: 'number',
-            name: 'employeeID',
-            message: " employee ID?",
-        },
-        {
+const generateMarkdown = require("./utils/generateMarkdown");
 
-            type: 'text',
-            name: 'phoneNumber',
-            message: "What is the phone number?",
-        },
-        {
-            type: 'text',
-            name: 'email',
-            message: "What is the email?",
+
+// Creating an array of questions for user input using Inquirer
+const questions = [
+    {
+        type: 'input',
+        name: 'Title',
+        message: 'What is the title of the project?'
+    },
+    {
+        type: 'input',
+        name: 'username',
+        message: 'What is your github username?' 
+    },
+    {
+        type: 'input',
+        name: 'Email',
+        message: 'What is your Email Address?' 
+    },
+    {
+        type: 'input',
+        name: 'description',
+        message: 'Give a brief description about your project' 
+    },
+     
+    {
+        type: 'input',
+        name: 'installation',
+        message: 'What does the user need to install to run this app ?'
+    },
+    {
+        type: 'input',
+        name: 'usage',
+        message: 'How to use this app ?'
+    },
+    {
+        type: 'input',
+        name: 'contributors',
+        message: 'Who Contributed to this Project?'
+    },
+    {
+        type: 'input',
+        name: 'Tests',
+        message: 'Command needed to run the tests?',
+        
+    },
+    {
+        type: 'list',
+        name: 'license',
+        message: 'Give license is being used ?',
+        choices:['MIT','APACHE 2.0','GPl-v3','None'] 
+    },
+  
+];
+
+// function to create README file using the user input
+function writeToFile(fileName, data) {
+    fs.writeFile(fileName, data, function(err){
+        if(err){
+            return console.log(err);
+        } else {
+            console.log("Generating README.md");
         }
-    ]) .then (answers => {
-        let manager = new Manager (answers.name, answers.employeeID, answers.email, answers.officeNumber);
-        teamArray.push(manager)
-        createMenu()
-    }) 
-
+    })
+    //return fs.writeFileSync(path.join(process.cwd(), fileName), data);
 }
 
-    const createEngineer = () => {
-        inquirer.prompt([
-            {
-                type: 'text',
-                name: 'name',
-                message: "What is the name?",
-            },
-            {
-                type: 'number',
-                name: 'employeeID',
-                message: "What is the employee ID?",
-            },
-            {
-                type: 'text',
-                name: 'email',
-                message: "What is the email?",
-            },
-            {
-                type: 'text',
-                name: 'github',
-                message: "What is the github username?",
-            }
-        ]) .then (answers => {
-            let engineer = new Engineer (answers.name, answers.employeeID, answers.email, answers.github);
-            teamArray.push(engineer)
-            createMenu()
-        })
-    }
+// TODO: Create a function to initialize app
+function init() {
+    inquirer.prompt(questions).then(function(data){
+        writeToFile('README.md', generateMarkdown(data));
+        
+    });
+}
 
-    const createIntern = () => {
-        inquirer.prompt([
-            {
-                type: 'text',
-                name: 'name',
-                message: "What is the  name?",
-            },
-            {
-                type: 'number',
-                name: 'employeeID',
-                message: "What is the employee ID?",
-            },
-            {
-                type: 'text',
-                name: 'email',
-                message: "What is the email?",
-            },
-            {
-                type: 'text',
-                name: 'school',
-                message: "What school does/ did you attend?",
-            }
-        ]) .then (answers => {
-            let intern = new Intern (answers.name, answers.employeeID, answers.email, answers.school);
-            teamArray.push(intern)
-            createMenu()
-        })
-    }
-    createManager()
+// Function call to initialize app
+init();
